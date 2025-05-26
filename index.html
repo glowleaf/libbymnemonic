@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitcoin Seed Word Memory Helper</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .security-notice {
+            background: #fff3cd;
+            border: 2px solid #ffeaa7;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .security-notice h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .security-notice p {
+            color: #856404;
+            font-size: 0.9rem;
+        }
+        
+        .main-content {
+            padding: 30px;
+        }
+        
+        .input-section {
+            margin-bottom: 30px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e6ed;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+            min-height: 120px;
+            transition: border-color 0.3s ease;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 140px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            color: white;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .output-section {
+            margin-top: 30px;
+        }
+        
+        .output-box {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+            white-space: pre-wrap;
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            min-height: 100px;
+        }
+        
+        .poem-output {
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #2c3e50;
+        }
+        
+        .mnemonic-output {
+            font-family: 'Courier New', monospace;
+            background: #e8f4f8;
+            border-color: #b8daff;
+            color: #155724;
+        }
+        
+        .word-count {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 10px;
+        }
+        
+        .tips {
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+        
+        .tips h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .tips ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .tips li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+            color: #2c3e50;
+        }
+        
+        .tips li:before {
+            content: "💡";
+            position: absolute;
+            left: 0;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            button {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 Bitcoin Seed Memory Helper</h1>
+            <p>Transform your seed words into unforgettable poems and mnemonics</p>
+        </div>
+        
+        <div class="security-notice">
+            <h3>🛡️ Security Notice</h3>
+            <p><strong>🔒 For maximum security: Enable airplane mode or disconnect from WiFi before entering your seed words.</strong></p>
+            <p>This tool runs completely offline in your browser. Your seed words never leave your device. Always verify your seed words work before relying on any memory technique.</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="seedWords">Enter your Bitcoin seed words (12 or 24 words):</label>
+                    <textarea id="seedWords" placeholder="apple banana cherry dog elephant..." rows="5"></textarea>
+                    <div class="word-count" id="wordCount">0 words</div>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn-primary" onclick="generatePoem()">📝 Create Poem</button>
+                    <button class="btn-secondary" onclick="generateMnemonic()">🧠 Create Mnemonic</button>
+                    <button class="btn-success" onclick="generateBoth()">✨ Create Both</button>
+                </div>
+            </div>
+            
+            <div class="output-section">
+                <div id="poemSection" style="display: none;">
+                    <label>🎭 Your Memory Poem:</label>
+                    <div class="output-box poem-output" id="poemOutput"></div>
+                </div>
+                
+                <div id="mnemonicSection" style="display: none;">
+                    <label>🔤 Your Memory Mnemonic:</label>
+                    <div class="output-box mnemonic-output" id="mnemonicOutput"></div>
+                </div>
+            </div>
+            
+            <div class="tips">
+                <h3>💭 Memory Tips</h3>
+                <ul>
+                    <li>Practice reciting your poem or mnemonic daily for the first week</li>
+                    <li>Create vivid mental images for each line or phrase</li>
+                    <li>Write out your seed words from memory periodically to test yourself</li>
+                    <li>Consider creating multiple different mnemonics for extra redundancy</li>
+                    <li>Store a secure backup separately - memory techniques are supplements, not replacements</li>
+                    <li>Never share your seed words or these memory aids with anyone</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const seedWordsInput = document.getElementById('seedWords');
+        const wordCountElement = document.getElementById('wordCount');
+        
+        seedWordsInput.addEventListener('input', updateWordCount);
+        
+        function updateWordCount() {
+            const words = seedWordsInput.value.trim().split(/\s+/).filter(word => word.length > 0);
+            wordCountElement.textContent = `${words.length} words`;
+            
+            if (words.length === 12 || words.length === 24) {
+                wordCountElement.style.color = '#28a745';
+            } else {
+                wordCountElement.style.color = '#6c757d';
+            }
+        }
+        
+        function getWords() {
+            const text = seedWordsInput.value.trim();
+            if (!text) {
+                alert('Please enter your seed words first!');
+                return null;
+            }
+            
+            const words = text.split(/\s+/).filter(word => word.length > 0);
+            
+            if (words.length !== 12 && words.length !== 24) {
+                alert('Please enter exactly 12 or 24 seed words.');
+                return null;
+            }
+            
+            return words;
+        }
+        
+        function generatePoem() {
+            const words = getWords();
+            if (!words) return;
+            
+            const poem = createPoem(words);
+            document.getElementById('poemOutput').textContent = poem;
+            document.getElementById('poemSection').style.display = 'block';
+        }
+        
+        function generateMnemonic() {
+            const words = getWords();
+            if (!words) return;
+            
+            const mnemonic = createMnemonic(words);
+            document.getElementById('mnemonicOutput').textContent = mnemonic;
+            document.getElementById('mnemonicSection').style.display = 'block';
+        }
+        
+        function generateBoth() {
+            const words = getWords();
+            if (!words) return;
+            
+            generatePoem();
+            generateMnemonic();
+        }
+        
+        function createPoem(words) {
+            const lines = [];
+            
+            // Create more structured verses
+            for (let i = 0; i < words.length; i += 4) {
+                const verseWords = words.slice(i, i + 4);
+                const verse = createVerse(verseWords, Math.floor(i/4) + 1);
+                lines.push(verse);
+            }
+            
+            // Add a memorable title and structure
+            const title = "🌟 The Ballad of My Digital Treasure 🌟\n" + "=".repeat(40) + "\n";
+            
+            return title + lines.join('\n\n') + '\n\n' + "=".repeat(40) + '\n"Remember well this sacred rhyme,\nFor it holds wealth beyond all time.\n"Keep these words within your heart,\n"And fortune never shall depart."';
+        }
+        
+        function createVerse(words, verseNum) {
+            const templates = [
+                `Verse ${verseNum}:
+In chambers deep where ${words[0]} dwells,
+The ${words[1]} rings like silver bells,
+While ${words[2]} dances in the light,
+And ${words[3]} guards throughout the night.`,
+                
+                `Verse ${verseNum}:
+From ${words[0]} to ${words[1]} I roam,
+Through ${words[2]}'s realm I make my home,
+Where ${words[3]} whispers ancient lore,
+Of treasures hidden evermore.`,
+                
+                `Verse ${verseNum}:
+The ${words[0]} calls across the sea,
+To ${words[1]} wild and running free,
+Past ${words[2]} mountain, ${words[3]} vale,
+My digital fortune tells its tale.`
+            ];
+            
+            const template = templates[verseNum % templates.length];
+            return template;
+        }
+        
+        function createMnemonic(words) {
+            const techniques = [
+                createFirstLetterMnemonic(words),
+                createStoryMnemonic(words),
+                createAcronymMnemonic(words),
+                createRhymeMnemonic(words)
+            ];
+            
+            return techniques.join('\n\n' + '-'.repeat(40) + '\n\n');
+        }
+        
+        function createFirstLetterMnemonic(words) {
+            const firstLetters = words.map(word => word.charAt(0).toUpperCase());
+            const chunks = [];
+            
+            for (let i = 0; i < firstLetters.length; i += 4) {
+                chunks.push(firstLetters.slice(i, i + 4).join(''));
+            }
+            
+            return `FIRST LETTER METHOD:\n${chunks.join(' - ')}\n\nRemember: ${chunks.join(' then ')}`;
+        }
+        
+        function createStoryMnemonic(words) {
+            // Handle duplicate words better
+            const uniqueWords = [...new Set(words)];
+            const duplicates = words.filter((word, index) => words.indexOf(word) !== index);
+            
+            let story = `STORY METHOD:\n`;
+            
+            if (duplicates.length > 0) {
+                story += `⚠️  Note: "${duplicates.join(', ')}" appear multiple times - remember their positions!\n\n`;
+            }
+            
+            // Create a more coherent story
+            story += `Our hero faced ${words[0]} but chose to ${words[1]} the wisdom of ${words[2]}. ` +
+                    `They needed to ${words[3]} their ${words[4]} before they could ${words[5]}. ` +
+                    `The journey helped them ${words[6]} a ${words[7]} that would ${words[8]} them to ${words[9]} ` +
+                    `how to ${words[10]} the final ${words[11]}`;
+            
+            if (words.length > 12) {
+                story += `. The adventure continued as they learned to ${words.slice(12, 16).join(', then ')}`;
+                if (words.length > 16) {
+                    story += `, and finally mastered ${words.slice(16).join(', ')}.`;
+                }
+            } else {
+                story += '.';
+            }
+            
+            return story;
+        }
+        
+        function createAcronymMnemonic(words) {
+            const groups = [];
+            for (let i = 0; i < words.length; i += 3) {
+                const group = words.slice(i, i + 3);
+                const acronym = group.map(w => w.charAt(0).toUpperCase()).join('');
+                groups.push(`${acronym}: ${group.join(' → ')}`);
+            }
+            
+            return `ACRONYM METHOD:\n${groups.join('\n')}`;
+        }
+        
+        function createRhymeMnemonic(words) {
+            const rhymes = [];
+            
+            // Create actual rhyming sentences or near-rhymes
+            for (let i = 0; i < words.length; i += 2) {
+                const word1 = words[i];
+                const word2 = words[i + 1] || 'end';
+                
+                // Try to create rhyming or alliterative phrases
+                const rhymingPhrases = [
+                    `${word1} brings luck, ${word2} brings pluck`,
+                    `When ${word1} appears, ${word2} draws near`,
+                    `${word1} so bright, ${word2} takes flight`,
+                    `Through ${word1} we find, ${word2} of mind`,
+                    `With ${word1} in sight, ${word2} feels right`,
+                    `${word1} stands tall, ${word2} calls all`,
+                    `Where ${word1} leads, ${word2} succeeds`
+                ];
+                
+                const phrase = rhymingPhrases[i % rhymingPhrases.length];
+                rhymes.push(phrase);
+            }
+            
+            return `RHYTHM & RHYME METHOD:\n${rhymes.join(',\n')}.\n\nChant this rhythm to remember the flow of your words!`;
+        }
+    </script>
+</body>
+</html>
