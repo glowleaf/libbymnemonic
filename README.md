@@ -17,6 +17,10 @@ A secure, offline tool for creating memorable poems and mnemonics from your Bitc
 
 ## 🚀 Quick Start
 
+### 🌐 Try it Online (Live Demo)
+**[https://libbymnemonic.loveisbitcoin.com/index.html](https://libbymnemonic.loveisbitcoin.com/index.html)**
+
+### 💾 Or Use Offline (Recommended for Real Seeds)
 1. **Download or Clone**: Get the `index.html` file
 2. **Open Offline**: Open the file in any modern web browser
 3. **Enable Airplane Mode**: For maximum security (recommended)
@@ -26,7 +30,7 @@ A secure, offline tool for creating memorable poems and mnemonics from your Bitc
 ## 🔧 Usage
 
 ### Basic Usage
-1. Open `index.html` in your web browser
+1. Open `https://libbymnemonic.loveisbitcoin.com/index.html` in your web browser
 2. Enter your Bitcoin seed words (12 or 24 words) in the text area
 3. Choose your preferred memory technique:
    - **📝 Create Poem**: Generates a structured, rhyming poem
