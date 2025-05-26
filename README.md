@@ -2,7 +2,7 @@
 
 A secure, offline tool for creating memorable poems and mnemonics from your Bitcoin seed words. Transform your 12 or 24-word seed phrases into unforgettable stories, poems, and memory aids.
 
-![LibbyMnemonic Header](libbymnemonicheader.png?v=2)
+![LibbyMnemonic Header](libbymnemonicheader.png?v=3)
 
 ## 🌟 Features
 
